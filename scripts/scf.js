@@ -1,15 +1,18 @@
 /* Weighted Aggregators */
 
 function usFmtInt(x) {
-  return x.toLocaleString('en-US', {maximumFractionDigits: 0});
+  return x.toLocaleString('en-US', { maximumFractionDigits: 0 });
 }
 
 function usFmt(x) {
-  return x.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  return x.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 }
 
 function weightedAggregators(weight) { return {
-  'Count': function weightedCount() {
+  Count: function weightedCount() {
     return function(data, rowKey, colKey) {
       return {
         count: 0,
@@ -68,10 +71,9 @@ function weightedAggregators(weight) { return {
 
 
 /* Categorical Features */
-function fromObject(attr, obj) { return (record) => obj[record[attr]]; }
+function fromObject(attr, obj) { return record => obj[record[attr]]; }
 const sex = { 1: 'Male', 2: 'Female' };
-const age = { 1: '35 and under', 2: '35-44', 3: '45-54', 4: '55-64', 5: '65-74',
-  6: '74 and over' };
+const age = { 1: '35 and under', 2: '35-44', 3: '45-54', 4: '55-64', 5: '65-74', 6: '74 and over' };
 const edu = { 1: '1: no high school diploma', 2: '2: high school diploma',
   3: '3: some college', 4: '4: bachelor\'s degree or higher' };
 const race = { 1: 'white non-Hispanic', 2: 'black/African-American',
@@ -82,7 +84,7 @@ const workStatus = { 1: 'employed', 2: 'self-employed',
 const occupation = { 1: 'managerial/professional',
   2: 'technical/sales/services', 3: 'other', 4: 'not working' };
 
-const categoricalVariables =  {
+const categoricalVariables = {
   'Sex': fromObject('SEX', sex),
   'Age (FRB)': fromObject('AGECL', age),
   'Education Level': fromObject('EDCL', edu),
@@ -96,20 +98,20 @@ const categoricalVariables =  {
 
 /* Continuous Features */
 const continuousVariables = {
-  'Income': (record) => record['INCOME'],
-  'Wage Income': (record) => record['WAGEINC'],
-  'Net Worth': (record) => record['NETWORTH'],
+  'Income': record => record['INCOME'],
+  'Wage Income': record => record['WAGEINC'],
+  'Net Worth': record => record['NETWORTH'],
   'Net Worth excl. EduLoans': (record) => parseFloat(record['NETWORTH']) + parseFloat(record['EDN_INST']),
   'Net Worth excl. Vehicles': (record) => parseFloat(record['NETWORTH']) - parseFloat(record['VEHIC']),
-  'Directly Held Mutual Funds': (record) => record['NMMF'],
-  'Retirement Accounts': (record) => record['RETQLIQ'],
-  'Primary Residence': (record) => record['HOUSES'],
-  'Liquid Assets': (record) => record['LIQ'],
-  'Total Assets': (record) => record['ASSET'],
-  'Total Debt': (record) => record['DEBT'],
-  'Residential Loans': (record) => record['MRTHEL'],
-  'Credit Card Debt': (record) => record['CCBAL'],
-  'Education Loans': (record) => record['EDN_INST'],
+  'Directly Held Mutual Funds': record => record.NMMF,
+  'Retirement Accounts': record => record.RETQLIQ,
+  'Primary Residence': record => record.HOUSES,
+  'Liquid Assets': record => record.LIQ,
+  'Total Assets': record => record.ASSET,
+  'Total Debt': record => record.DEBT,
+  'Residential Loans': record => record.MRTHEL,
+  'Credit Card Debt': record => record.CCBAL,
+  'Education Loans': record => record.EDN_INST,
 };
 
 const allVariables = Object.assign({}, categoricalVariables, continuousVariables);
@@ -130,14 +132,14 @@ const pivotOptions = function(fields) {
   };
 }
 
-$(function() {
-  Papa.parse("short.csv", {
+$(() => {
+  Papa.parse('short.csv', {
     download: true,
     skipEmptyLines: true,
     header: true,
-    complete: function(parsed) {
-      $("#loading").hide();
-      $("#output").pivotUI(parsed.data, pivotOptions(parsed.meta.fields));
+    complete: (parsed) => {
+      $('#loading').hide();
+      $('#output').pivotUI(parsed.data, pivotOptions(parsed.meta.fields));
     }
   });
 });
