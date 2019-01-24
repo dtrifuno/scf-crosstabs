@@ -74,33 +74,52 @@ function weightedAggregators(weight) { return {
 function fromObject(attr, obj) { return record => obj[record[attr]]; }
 const sex = { 1: 'Male', 2: 'Female' };
 const age = { 1: '35 and under', 2: '35-44', 3: '45-54', 4: '55-64', 5: '65-74', 6: '74 and over' };
-const edu = { 1: '1: no high school diploma', 2: '2: high school diploma',
-  3: '3: some college', 4: '4: bachelor\'s degree or higher' };
+const edu = {
+  1: '1: no high school diploma',
+  2: '2: high school diploma',
+  3: '3: some college',
+  4: '4: bachelor\'s degree or higher',
+};
 const race = { 1: 'white non-Hispanic', 2: 'black/African-American',
   3: 'Hispanic', 4: 'Asian', 5: 'other' };
-const marriage = { 1: 'married/cohabitating', 2: "not married/cohabitating" };
-const workStatus = { 1: 'employed', 2: 'self-employed',
-  3: 'retired/disabled/student/homemaker', 4: 'other not working' };
+const marriage = { 1: 'married/cohabitating', 2: 'not married/cohabitating' };
+const workStatus = {
+  1: 'employed',
+  2: 'self-employed',
+  3: 'retired/disabled/student/homemaker',
+  4: 'other not working',
+};
 const occupation = { 1: 'managerial/professional',
   2: 'technical/sales/services', 3: 'other', 4: 'not working' };
 
 const categoricalVariables = {
-  'Sex': fromObject('SEX', sex),
+  Sex: fromObject('SEX', sex),
+  'Age (fine)': function ageBin(record) {
+    const age = parseInt(record.AGE, 10);
+    if (age < 18) {
+      return '<18';
+    }
+    if (age > 82) {
+      return '>82';
+    }
+    const lowerAge = Math.round(age - ((age - 18) % 9));
+    return `${lowerAge}-${lowerAge + 8}`;
+  },
   'Age (FRB)': fromObject('AGECL', age),
   'Education Level': fromObject('EDCL', edu),
-  'Race': fromObject('RACE', race),
-  'Marriage': fromObject('MARRIED', marriage),
-  'Children': (record) => record['KIDS'],
+  Race: fromObject('RACE', race),
+  Marriage: fromObject('MARRIED', marriage),
+  Children: record => record.KIDS,
   'Work Status': fromObject('OCCAT1', workStatus),
-  'Occupation': fromObject('OCCAT2', occupation)
+  Occupation: fromObject('OCCAT2', occupation),
 };
 
 
 /* Continuous Features */
 const continuousVariables = {
-  'Income': record => record['INCOME'],
-  'Wage Income': record => record['WAGEINC'],
-  'Net Worth': record => record['NETWORTH'],
+  Income: record => record.INCOME,
+  'Wage Income': record => record.WAGEINC,
+  'Net Worth': record => record.NETWORTH,
   'Net Worth excl. EduLoans': (record) => parseFloat(record['NETWORTH']) + parseFloat(record['EDN_INST']),
   'Net Worth excl. Vehicles': (record) => parseFloat(record['NETWORTH']) - parseFloat(record['VEHIC']),
   'Directly Held Mutual Funds': record => record.NMMF,
