@@ -190,6 +190,10 @@ $(() => {
       },
     },
     derivedAttributes: allVariables,
+    cols: ['Education Level'],
+    rows: ['Age (fine)'],
+    aggregatorName: 'Median of',
+    vals: ['Wage Income'],
   });
 
   JSZipUtils.getBinaryContent('SCFP2016.zip', (err, data) => {
