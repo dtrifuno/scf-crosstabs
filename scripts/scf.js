@@ -93,7 +93,7 @@ $(() => {
   const sex = { 1: 'Male', 2: 'Female' };
 
   const age = {
-    1: '<35', 2: '35-44', 3: '45-54', 4: '55-64', 5: '65-74', 6: '>74',
+    1: '35 and under', 2: '35-44', 3: '45-54', 4: '55-64', 5: '65-74', 6: '74 and over',
   };
 
   const edu = {
@@ -131,11 +131,8 @@ $(() => {
     Sex: fromObject('SEX', sex),
     'Age (fine)': function ageBin(record) {
       const age = parseInt(record.AGE, 10);
-      if (age < 18) {
-        return '<18';
-      }
-      if (age > 81) {
-        return '>81';
+      if (age > 73) {
+        return '73+';
       }
       const lowerAge = Math.round(age - ((age - 18) % 8));
       return `${lowerAge}-${lowerAge + 7}`;
@@ -213,8 +210,15 @@ $(() => {
   const renderers = $.extend($.pivotUtilities.renderers,
     $.pivotUtilities.plotly_renderers);
 
+  const aggregators = weightedAggregators('WGT');
+  const tpl = $.pivotUtilities.aggregatorTemplates;
+  $.extend(aggregators, {
+    'Fraction of Total': tpl.fractionOf(aggregators.Count, 'total', usFmt),
+    'Fraction of Rows': tpl.fractionOf(aggregators.Count, 'row', usFmt),
+    'Fraction of Columns': tpl.fractionOf(aggregators.Count, 'col', usFmt),
+  });
   const pivotOptions = fields => ({
-    aggregators: weightedAggregators('WGT'),
+    aggregators,
     hiddenFromAggregators: Object.keys(categoricalVariables),
     hiddenFromDragDrop: Object.keys(continuousVariables),
     hiddenAttributes: fields,
@@ -226,9 +230,10 @@ $(() => {
       },
     },
     derivedAttributes: allVariables,
-    cols: ['Education Level'],
-    rows: ['Age (fine)'],
+    cols: ['Age (fine)'],
+    rows: ['Education Level'],
     aggregatorName: 'Median of',
+    rendererName: 'Line Chart',
     vals: ['Wage Income'],
     rowOrder: 'key_a_to_z',
     colOrder: 'key_a_to_z',
@@ -236,6 +241,8 @@ $(() => {
 
   JSZipUtils.getBinaryContent('SCFP2016.zip', (err, data) => {
     if (err) {
+      $('#loading').toggleClass('alert-primary alert-danger');
+      $('#loading').html('<p class="lead"> Download failed. Please try reloading this page at a later time.</p>');
       throw err;
     }
     JSZip.loadAsync(data).then((zip) => {

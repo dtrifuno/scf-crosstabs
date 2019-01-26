@@ -15,54 +15,42 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip-utils/0.0.2/jszip-utils.min.js" integrity="sha256-AIk6chbus7IS5RVpqSNV1X7Qihbi1YC0lOLuUXQZ+mw=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.6.3/papaparse.min.js" integrity="sha256-1KCNEBmmUm8Oo4IOlg7ZnbFjBZXxCa9bILP7eGDqYOY=" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.23.0/pivot.min.css" integrity="sha256-nn3M6N8S2BjPirPhvCF61ZCcgcppdLtnaNOLhiwro7E=" crossorigin="anonymous" />
-  <style>table.pvtTable { font-size: 14px; } table.pvtTable tbody tr th, table.pvtTable thead tr th { font-size: 12px; }</style>
+  <style>table.pvtTable { font-size: 14px; } table.pvtTable tbody tr th, table.pvtTable thead tr th { font-size: 12px; } #output { overflow: auto; }</style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.23.0/pivot.min.js" integrity="sha256-/btBGbvOvx2h/NcXVS+JPFhnoUGbZXDX0O2v6AaABLU=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.23.0/plotly_renderers.min.js" integrity="sha256-Y0EYqPg/MEAxRVq5Baq0iNEUDPE8d3KpJ0nk95EqbRQ=" crossorigin="anonymous"></script>
 </head>
 
 <body>
-  <div class="container">
-    <div class="pb-2 mt-4 mb-2 border-bottom">
-      <h1><em>Survey of Consumer Finances (2016)</em> Cross Tabulator</h1>
-    </div>
-    <script type="text/javascript" src="scripts/scf.js"></script>
-    <div class="row">
-      <div class="col-lg-10 mx-auto">
-        <div id="loading" class="alert alert-primary" role="alert">
-          <p class="lead">
-            Downloading and processing the dataset...<br>
-            This might take several minutes.
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-lg-11 mx-auto">
-        <div id="output"></div>
-      </div>
+  <div class="pb-2 ml-3 mt-4 mb-2 border-bottom">
+    <h1><em>Survey of Consumer Finances (2016)</em> Cross Tabulator</h1>
+  </div>
+  <div class="col-lg-auto ml-2">
+      <div id="output"></div>
+  </div>
+  <div id="loading" class="alert alert-primary" role="alert">
+      <p class="lead">
+        Downloading and processing the dataset...<br>
+        This might take several minutes.
+      </p>
     </div>
     <hr>
-    <div class="row">
-      <div class="col-lg-10 mx-auto">
-        <h4>Instructions</h4>
-        <p>
-          Drag the variable names from the first column to the column/row to the right to select the variables whose cross tabulation you want to compute. Note that you can drag multiple variables to create a multilevel variable. Use the leftmost dropdown menu to
-          change the way the result is displayed, and the menu to the right to choose the aggregation function.
-        </p>
-      </div>
+    <div class="col-lg-8 ml-3">
+      <h4>Instructions</h4>
+      <p>
+        Drag the variable names from the first column to the column/row to the right to select the variables whose cross tabulation you want to compute. Note that you can drag multiple variables to create a multilevel variable. Use the leftmost dropdown menu to
+        change the way the result is displayed, and the menu to the right to choose the aggregation function.
+      </p>
     </div>
-    <div class="row">
-      <div class="col-lg-10 mx-auto">
-        <h4>Notes</h4>
-        <ul>
-          <li>All figures are in 2016 dollars.</li>
-          <li>The full data set is available for download from the <a href="https://www.federalreserve.gov/econres/scfindex.htm">Federal Reserve Board's website.</a></li>
-          <li>Due to the survey design, the row weights are not integers, and thus it is possible to get fractional results for features that are usually integral. </li>
-          <li>The aggregator <b>Count</b> returns the weighted count, i.e. the estimated count in the population. The aggregator <b>Sample Count</b> gives the count in the sample <em>before</em>
-            weighting/replication.</li>
-        </ul>
-      </div>
+    <div class="col-lg-8 ml-3">
+      <h4>Notes</h4>
+      <ul>
+        <li>All figures are in 2016 dollars.</li>
+        <li>The full data set is available for download from the <a href="https://www.federalreserve.gov/econres/scfindex.htm">Federal Reserve Board's website.</a></li>
+        <li>Due to the survey design, the row weights are not integers, and thus it is possible to get fractional results for features that are usually integral. </li>
+        <li>The aggregator <b>Count</b> returns the weighted count, i.e. the estimated count in the population. The aggregator <b>Sample Count</b> gives the count in the sample <em>before</em>
+          weighting/replication.</li>
+      </ul>
     </div>
-  </div>
+  <script type="text/javascript" src="scripts/scf.min.js"></script>
 </body>
 </html>
