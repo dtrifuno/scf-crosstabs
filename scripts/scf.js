@@ -210,11 +210,15 @@ $(() => {
 
   const allVariables = Object.assign({}, categoricalVariables, continuousVariables);
 
+  const renderers = $.extend($.pivotUtilities.renderers,
+    $.pivotUtilities.plotly_renderers);
+
   const pivotOptions = fields => ({
     aggregators: weightedAggregators('WGT'),
     hiddenFromAggregators: Object.keys(categoricalVariables),
     hiddenFromDragDrop: Object.keys(continuousVariables),
     hiddenAttributes: fields,
+    renderers,
     rendererOptions: {
       table: {
         rowTotals: false,
@@ -226,6 +230,8 @@ $(() => {
     rows: ['Age (fine)'],
     aggregatorName: 'Median of',
     vals: ['Wage Income'],
+    rowOrder: 'key_a_to_z',
+    colOrder: 'key_a_to_z',
   });
 
   JSZipUtils.getBinaryContent('SCFP2016.zip', (err, data) => {
