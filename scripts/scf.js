@@ -140,6 +140,38 @@ $(() => {
       const lowerAge = Math.round(age - ((age - 18) % 8));
       return `${lowerAge}-${lowerAge + 7}`;
     },
+    'Wealth Class': function wealthBin(record) {
+      const worth = parseFloat(record.NETWORTH);
+      if (worth < 0) {
+        return '1: <0';
+      } if (worth < 40000) {
+        return '2: 0-40k';
+      } if (worth < 100000) {
+        return '3: 40k-100k';
+      } if (worth < 1000000) {
+        return '4: 100k-1M';
+      } if (worth < 5000000) {
+        return '5: 1M-5M (HNW)';
+      } if (worth < 30000000) {
+        return '6: 5M-30M (VHNW)';
+      }
+      return '7: >30M (UHNW)';
+    },
+    'Income Class': function incomeBin(record) {
+      const income = parseFloat(record.INCOME);
+      if (income <= 20000) {
+        return '2: 0-20k';
+      } if (income <= 39000) {
+        return '3: 20k-39k';
+      } if (income <= 83000) {
+        return '4: 39k-83k';
+      } if (income <= 170000) {
+        return '5: 83k-170k';
+      } if (income <= 500000) {
+        return '6: 170k-500k';
+      }
+      return '8: >500k';
+    },
     'Age (FRB)': fromObject('AGECL', age),
     'Education Level': fromObject('EDCL', edu),
     Race: fromObject('RACE', race),
